@@ -1,4 +1,4 @@
-const Version = "g.1.17";
+const Version = "g.1.18";
 // Provide publish/subscribe communications with others. This could be to a server, p2p, etc.
 // Using a pub/sub discipline is up to the application, but it happens to work well here.
 class Client extends Croquet.View {
@@ -507,6 +507,7 @@ class LobbyUI extends Client {
             name: roomId + Version,
             password: "none",
             model: RoomRecord,
+            autoSleep: false,
             options: {roomId},
             view: Room
         });
