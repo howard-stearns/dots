@@ -7,8 +7,6 @@ class Client extends Croquet.View {
     }
 }
 class Avatar extends Client {
-    static domAvatars = new WeakMap();
-    static baseRadius = 50;
     constructor(options) {
         super();
         let {room, model, streamingAvatarId=''} = options,
@@ -202,6 +200,8 @@ class Avatar extends Client {
         return source[positionName];
     }
 }
+Avatar.domAvatars = new WeakMap();
+Avatar.baseRadius = 50;
 
 class MyAvatar extends Avatar {
     constructor(...parameters) {
