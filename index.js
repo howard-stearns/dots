@@ -1,4 +1,4 @@
-const Version = "g.1.12";
+const Version = "g.1.14";
 // Provide publish/subscribe communications with others. This could be to a server, p2p, etc.
 // Using a pub/sub discipline is up to the application, but it happens to work well here.
 class Client extends Croquet.View {
@@ -287,8 +287,8 @@ class MyAvatar extends Avatar {
                 destination = context.createMediaStreamDestination(); // has destination.stream property
             audioSource.buffer = buffer;
             audioSource.connect(destination);
-            let ourId = this.model.sessionAvatarId;
-                sessionAvatarId = Object.keys(this.audioSources).length + 'm' + ourId
+            let ourId = this.model.sessionAvatarId,
+                sessionAvatarId = Object.keys(this.audioSources).length + 'm' + ourId,
                 name = `${this.model.name}'s ${file.name.replace('.mp3', '')}`;
             this.audioSources[sessionAvatarId] = {
                 source: audioSource,
@@ -529,5 +529,6 @@ Croquet.Session.join({  // Join the lobby session, which we will be part of the 
     view: LobbyUI
 }).then(s => {
     LobbySession = s;
+    console.log('Dots', Version);
     Array.from(document.getElementsByTagName('a')).forEach(e => e.onclick = (event => LobbySession.view.enterRoom(event.target.parentElement.id)));
 });
