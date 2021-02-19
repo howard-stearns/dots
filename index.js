@@ -1,4 +1,4 @@
-const Version = "g.1.16";
+const Version = "g.1.17";
 // Provide publish/subscribe communications with others. This could be to a server, p2p, etc.
 // Using a pub/sub discipline is up to the application, but it happens to work well here.
 class Client extends Croquet.View {
@@ -31,8 +31,7 @@ class Avatar extends Client {
         }
         if (model.image) this.setImage(model.image);
         if (streamingAvatar || model.sessionAvatarId === this.viewId) {
-            let position = this.hifiData(this.model.x, this.model.y),
-                initialHiFiAudioAPIData = new HighFidelityAudio.HiFiAudioAPIData({position}); 
+            let initialHiFiAudioAPIData = this.hifiData(this.model.x, this.model.y);
             this.communicator = new HighFidelityAudio.HiFiCommunicator({initialHiFiAudioAPIData});
             this.connect();
         }
@@ -52,10 +51,10 @@ class Avatar extends Client {
     get audioSource() { return this.streamingAvatar && this.streamingAvatar.audioSources[this.model.sessionAvatarId]; }
     hifiData(x, y) {
         const PixelsToMeters = 1/40;
-        return {
+        return new HighFidelityAudio.HiFiAudioAPIData({
             position: new HighFidelityAudio.Point3D({x: x * PixelsToMeters, y:0, z: y * PixelsToMeters}),
-            orientation: new HighFidelityAudio.OrientationEuler3D({ "pitchDegrees": 0, "yawDegrees": 0, "rollDegrees": 0 })
-        };
+            orientationEuler: new HighFidelityAudio.OrientationEuler3D({ "pitchDegrees": 0, "yawDegrees": 0, "rollDegrees": 0 })
+        });
     }
     setInputAudio(stream, stereo = false) {
         this.gotInputAudio = true;
