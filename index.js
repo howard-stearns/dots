@@ -1,4 +1,4 @@
-const Version = "l.1.11";
+const Version = "g.1.11";
 // Provide publish/subscribe communications with others. This could be to a server, p2p, etc.
 // Using a pub/sub discipline is up to the application, but it happens to work well here.
 class Client extends Croquet.View {
@@ -200,7 +200,7 @@ class Avatar extends Client {
         return source[positionName];
     }
 }
-Avatar.domAvatars = new WeakMap();
+Avatar.domAvatars = new WeakMap(); // Safari doesn't allow static var = val; syntax in classes yet.
 Avatar.baseRadius = 50;
 
 class MyAvatar extends Avatar {
@@ -403,7 +403,7 @@ class RoomRecord extends Record {
         let name = this.availableNames.shift(),
             color = this.availableColors.shift(),
             x = this.random() * 300 + 50,
-            y = this.random() * 700 + 50;
+            y = this.random() * 600 + 50;
         this.addAvatarRecord({sessionAvatarId, name, color, x, y});
     }
     exit(sessionAvatarId) {

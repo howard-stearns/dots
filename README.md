@@ -18,8 +18,7 @@ Because everyone is anonymous, you cannot speak for your first 5 seconds in a ro
 I don't want people to guess as to what is happening on the server, without being able to see the source, and I don't want the hassle of running a server. So I'm using Croquet to have replicated behavior without a server.
 
 Ideas for further work, in addition to the ~~not-implemented~~ above:
-- Why doesn't this work on iPhone?
-- QR code to share the "full screen" view with someone.
+- QR code to share the "full screen" view with someone. But who is face2face any more?
 - Video: select a person to show their video. Select anyone who is sharing, but only one shown at a time.
 - zoom or limit travels?
 - persist your avatar image, but then how do you remove it?
