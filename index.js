@@ -217,7 +217,7 @@ class MyAvatar extends Avatar {
         navigator.mediaDevices.getUserMedia({ audio: bestAudioConstraints, video: false })
             .then(stream => {
                 this.setInputAudio(stream);
-                this.canPickFile("image/*,audio/*");
+                this.canPickFile(".mp3,.jpg,.jpeg,.png,image/*,audio/*");
             })
             .catch(console.error); // No harm. User can try again.
     }
@@ -280,14 +280,15 @@ class MyAvatar extends Avatar {
         this.publish(scope, 'storeImage', dataURL);
     }
     async audio(file, event) { // Handle an audio file.
-        let context = this.audioContext || (this.audioContext = new AudioContext());
+        let context = this.audioContext || (this.audioContext = new (window.AudioContext || window.webkitAudioContext)());
         let result = await this.fileResult(file, 'readAsArrayBuffer');
         context.decodeAudioData(result, buffer => {
             let audioSource = context.createBufferSource(),
                 destination = context.createMediaStreamDestination(); // has destination.stream property
             audioSource.buffer = buffer;
             audioSource.connect(destination);
-            let sessionAvatarId = 'm' + Object.keys(this.audioSources).length,
+            let outId = this.model.sessionAvatarId;
+                sessionAvatarId = Object.keys(this.audioSources).length + 'm' + ourId
                 name = `${this.model.name}'s ${file.name.replace('.mp3', '')}`;
             this.audioSources[sessionAvatarId] = {
                 source: audioSource,
@@ -298,7 +299,7 @@ class MyAvatar extends Avatar {
             this.publish(this.sessionId, 'addAvatarRecord', {
                 sessionAvatarId, name, x, y,
                 color: this.model.color,
-                streamingAvatarId: this.model.sessionAvatarId
+                streamingAvatarId: ourId
             });
         });
     }

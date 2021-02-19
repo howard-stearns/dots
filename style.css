@@ -1,6 +1,6 @@
 body {
-  height: 100vh;
-  width: 100vw;
+  height: 80%; // Allow room for codepen chrome, without going over on mobile.
+  width: 80%;
 }
 map {
     height: 100%;
