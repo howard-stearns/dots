@@ -1,6 +1,6 @@
 body {
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 95%; /* Don't wiggle on mobile when moving around */
 }
 map {
     height: 100%;

@@ -1,4 +1,4 @@
-const Version = "g.1.15";
+const Version = "g.1.16";
 // Provide publish/subscribe communications with others. This could be to a server, p2p, etc.
 // Using a pub/sub discipline is up to the application, but it happens to work well here.
 class Client extends Croquet.View {
@@ -399,8 +399,8 @@ class RoomRecord extends Record {
     join(sessionAvatarId) {
         let name = this.availableNames.shift(),
             color = this.availableColors.shift(),
-            x = this.random() * 300 + 50,
-            y = this.random() * 600 + 50;
+            x = this.random() * 250 + 50,
+            y = this.random() * 550 + 50;
         this.addAvatarRecord({sessionAvatarId, name, color, x, y});
     }
     exit(sessionAvatarId) {

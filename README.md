@@ -18,7 +18,7 @@ Because everyone is anonymous, you cannot speak for your first 5 seconds in a ro
 I don't want people to guess as to what is happening on the server, without being able to see the source, and I don't want the hassle of running a server. So I'm using Croquet to have replicated behavior without a server.
 
 Ideas for further work, in addition to the ~~not-implemented~~ above:
-- Bug: work better on mobile, wrt screen size
+- Bug: something wrong with initial audio positioning until drag.
 - Bug: something wrong with behavior when tab is not closed, but goes to sleep
 - Important Feature: Mute!
 - Too easy to click instead of drag, bringing up file picker. Maybe instead have have a context menu by right-mouse/touch-hold?
