@@ -1,4 +1,4 @@
-const Version = "g.1.14";
+const Version = "g.1.15";
 // Provide publish/subscribe communications with others. This could be to a server, p2p, etc.
 // Using a pub/sub discipline is up to the application, but it happens to work well here.
 class Client extends Croquet.View {
@@ -59,7 +59,7 @@ class Avatar extends Client {
     }
     setInputAudio(stream, stereo = false) {
         this.gotInputAudio = true;
-        this.communicator.setInputAudioMediaStream(stream, stereo).then(console.info);
+        this.communicator.setInputAudioMediaStream(stream, stereo);
     }
     makeJWT(applicationUserId) { // A production app would likely require the user to log in to a server, which would provide the JWT token.
         let header = {alg: 'HS256', typ: 'JWT'},
@@ -79,7 +79,7 @@ class Avatar extends Client {
         let jwt = this.makeJWT(this.hifiUserId);
         this.communicator.connectToHiFiAudioAPIServer(jwt, 'api-alpha-01').then(response => this.connected(response));
     }
-    connected(response) { console.info('connect response', response); }
+    connected(response) { console.info('HiFidelityAudio connect response', response); }
     redraw({x = this.model.x, y = this.model.y, sourceId} = {}) { // after x/y change
         if (sourceId === this.viewId) return; // We've already done it.
         if (this.communicator) this.communicator.updateUserDataAndTransmit(this.hifiData(x, y));
@@ -178,7 +178,9 @@ class Avatar extends Client {
         // Define move/end on whole document, in case user moves faster than the domAvatar.
         document.onmousemove = document.ontouchmove = event => this.drag(event);
         document.onmouseup = document.ontouchend = event => this.stopDrag(event);
-        reorderAvatars(this.domAvatar);
+        for (let element of document.getElementsByTagName('avatar')) { // Keep ours on top, locally.
+            element.style.zIndex = (element == this.domAvatar) ? 1 : "auto";
+        }
     }
     drag(event) { // On each move, update position.
         this.didDrag = true;
@@ -200,8 +202,8 @@ class Avatar extends Client {
         return source[positionName];
     }
 }
-Avatar.domAvatars = new WeakMap(); // Safari doesn't allow static var = val; syntax in classes yet.
-Avatar.baseRadius = 50;
+Avatar.baseRadius = 50; // Safari doesn't allow `static var = val;` syntax in classes yet.
+Avatar.domAvatars = new WeakMap(); // Map of avatar elements back to Avatar Client objects.
 
 class MyAvatar extends Avatar {
     constructor(...parameters) {
@@ -241,7 +243,7 @@ class MyAvatar extends Avatar {
             let avatar = avatars[datum.providedUserID];
             if (!avatar) return;
             avatar.volume = datum.volumeDecibels; // No need to re-publish to server/model/peer/records.
-            if (avatar === mine && datum.volumeDecibels > -35) { // Start countdown to enable kick, if needed.
+            if (avatar === mine && datum.volumeDecibels > -30) { // Start countdown to enable kick, if needed.
                 if (typeof(this.model.kickState) !== 'number') { // Not already counting or counted.
                     this.publish(this.model.sessionAvatarId, 'setKickState', 10);
                 }
@@ -312,12 +314,6 @@ class MyAvatar extends Avatar {
     }
 }
 
-function reorderAvatars(topAvatar) {
-    for (let element of document.getElementsByTagName('avatar')) {
-        let index = element == topAvatar ? 1 : "auto";
-        element.style.zIndex = index;
-    }
-}
 function ourBehaviorOnly(event) { // E.g., don't let browser create a new tab with media.
     event.stopPropagation();
     event.preventDefault();
@@ -446,7 +442,7 @@ class AvatarRecord extends Record {
         return this.kickState === 0;
     }
 }
-// Now for the lobby.
+// Now for the lobby. Just four messages!
 class LobbyRecord extends Record {
     init(options) {
         super.init(options);
@@ -529,6 +525,6 @@ Croquet.Session.join({  // Join the lobby session, which we will be part of the 
     view: LobbyUI
 }).then(s => {
     LobbySession = s;
-    console.log('Dots', Version);
+    console.log('HighFidelityAudio example Dots', Version);
     Array.from(document.getElementsByTagName('a')).forEach(e => e.onclick = (event => LobbySession.view.enterRoom(event.target.parentElement.id)));
 });

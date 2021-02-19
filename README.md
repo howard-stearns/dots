@@ -18,8 +18,13 @@ Because everyone is anonymous, you cannot speak for your first 5 seconds in a ro
 I don't want people to guess as to what is happening on the server, without being able to see the source, and I don't want the hassle of running a server. So I'm using Croquet to have replicated behavior without a server.
 
 Ideas for further work, in addition to the ~~not-implemented~~ above:
+- Bug: work better on mobile, wrt screen size
+- Bug: something wrong with behavior when tab is not closed, but goes to sleep
+- Important Feature: Mute!
+- Too easy to click instead of drag, bringing up file picker. Maybe instead have have a context menu by right-mouse/touch-hold?
 - QR code to share the "full screen" view with someone. But who is face2face any more?
-- Video: select a person to show their video. Select anyone who is sharing, but only one shown at a time.
-- zoom or limit travels?
-- persist your avatar image, but then how do you remove it?
+- Video: select a person to show their video. Select anyone who is sharing, but only one shown at a time to imit "Zoom fatigue".
+- zoom or limit travels? (relates to mobile screen size issues)
+- persist your color/name for several minutes, so that people will recognize you after you refresh.
+- persist your avatar image (indefinitely?), but then how do you remove it?
 - I'd like to highlight map and your own avatar as drop targets, depending on what is being dragged. But the dragleave fires on all subelements.
