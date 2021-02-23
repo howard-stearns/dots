@@ -1,4 +1,4 @@
-const Version = "g.1.18";
+const Version = "g.1.20";
 // Provide publish/subscribe communications with others. This could be to a server, p2p, etc.
 // Using a pub/sub discipline is up to the application, but it happens to work well here.
 class Client extends Croquet.View {
@@ -60,23 +60,32 @@ class Avatar extends Client {
         this.gotInputAudio = true;
         this.communicator.setInputAudioMediaStream(stream, stereo);
     }
-    makeJWT(applicationUserId) { // A production app would likely require the user to log in to a server, which would provide the JWT token.
-        let header = {alg: 'HS256', typ: 'JWT'},
-            payload = {
+    async makeJWT(applicationUserId) { // A production app would likely require the user to log in to a server, which would provide the JWT token.
+        let payload = {
                 app_id: '6023060e-1668-483f-bd6f-e7ff707b8918',
                 space_id: this.room.model.hifiRoomId,
                 user_id: applicationUserId,
                 stack: 'audionet-mixer-api-alpha-01'
-            },
-            secret = '8ceef267-d4cb-4705-8a58-fbfa2630926e';
+            };
+        // If a client knew the secret, the client could generate the JWT using this in the .html
+        // <script src="https://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js">
+        // and:
+        /*
+        let header = {alg: 'HS256', typ: 'JWT'},
+            secret = YOUR_ACCOUNT_SECRET;
         return KJUR.jws.JWS.sign("HS256", JSON.stringify(header), JSON.stringify(payload), secret);
+        */
+        // That's the easiest thing for running your own demo, but, of course, anyone who looked at the source could connect at your expense.
+        // Below, we contact a server that only responds to this demo. 
+        let response = await fetch('https://lit-inlet-37897.herokuapp.com?payload=' + JSON.stringify(payload));
+        return await response.json();
     }
     get hifiUserId() {  // Could be anything unique, such as this.model.sessionAvatarId.
         return `${this.model.color} ${this.model.name}`;
     }
     async connect() {
-        let jwt = this.makeJWT(this.hifiUserId);
-        this.communicator.connectToHiFiAudioAPIServer(jwt, 'api-alpha-01').then(response => this.connected(response));
+        let jwt = await this.makeJWT(this.hifiUserId);
+        this.communicator.connectToHiFiAudioAPIServer(jwt).then(response => this.connected(response));
     }
     connected(response) { console.info('HiFidelityAudio connect response', response); }
     redraw({x = this.model.x, y = this.model.y, sourceId} = {}) { // after x/y change
