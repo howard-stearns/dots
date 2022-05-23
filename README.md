@@ -17,7 +17,7 @@ I don't want people to guess as to what is happening on the server, without bein
 
 # Demo
 
-You can try this out directly [here](https://highfidelity.github.io/Spatial-Audio-API-Examples/examples/web/dots).
+You can try this out directly [obsolete]().
 
 # Run your own
 
